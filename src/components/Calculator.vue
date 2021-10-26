@@ -11,6 +11,8 @@
             <button @click="sum = operand1 - operand2">-</button>
             <button @click="mult">*</button>
             <button @click="div(operand1, operand2)">/</button>
+            <button @click="divTwo(operand1, operand2)">%</button>
+            <button @click="exponentiation(operand1, operand2)">^</button>
         </div>
         {{powWithOperand}}
         {{powSum}}
@@ -44,6 +46,12 @@ export default {
         },
         sendData(data){
             console.log('Send Data name', data);
+        },
+        divTwo(op1, op2){
+            this.sum = Math.floor(op1 / op2);
+        },
+        exponentiation(op1, op2){
+            this.sum = Math.pow(op1,op2);
         }
     },
     //ВЫЧИСЛЯЕТ значения после действий пользователя(?)
