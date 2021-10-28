@@ -1,21 +1,26 @@
 <template>
     <div>
+        <!-- модификаторы у v-model:
+        v-model.number - Для автоматического приведения введённого пользователем к Number,
+        v-model.lazy - обновляет данные после завершения ввода
+        v-model.trim - автоматически обрезает пробелы в начале и в конце строки
+        v-model.number.trim - допустимо
+        -->
+        <input type="text" v-model.lazy="text1" placeholder="operand0">
         <input type="number" v-model.number="operand1" placeholder="operand1">
         <input type="number" 
         v-model.number="operand2" 
         placeholder="operand2" 
         @blur="sendData(operand2)"/>
-        = {{sum}}
+        = {{result}}
         <div class="keyboard">
-            <button v-on:click="sum = operand1 + operand2">+</button>
-            <button @click="sum = operand1 - operand2">-</button>
-            <button @click="mult">*</button>
-            <button @click="div(operand1, operand2)">/</button>
-            <button @click="divTwo(operand1, operand2)">%</button>
-            <button @click="exponentiation(operand1, operand2)">^</button>
+            <button @click="calculate('+')">+</button>
+            <button @click="calculate('-')">-</button>
+            <button @click="calculate('*')">*</button>
+            <button @click="calculate('/')">/</button>
+            <button @click="calculate('%')">%</button>
+            <button @click="calculate('^')">^</button>
         </div>
-        {{powWithOperand}}
-        {{powSum}}
     </div>
 </template>
 
@@ -24,45 +29,86 @@ export default {
     name: "Calculator",
     data(){
         return{
+            text1: '',
             operand1: 0,
             operand2: 0,
-            sum: 0,
+            result: 0,
+            error: '',
         }
     },
     //watch позволяет увидеть изменения (новое значение и старое) СМОТРИТ за изменениями
     watch: {
-        sum: function(newValue, oldValue){
-            // this.sum = this.sum + 1 (будет цикл, т.к. после изменения сумма увеличивается на 1(еще раз меняется))
+        result: function(newValue, oldValue){
+            // this.result = this.result + 1 (будет цикл, т.к. после изменения сумма увеличивается на 1(еще раз меняется))
             console.log(newValue, oldValue);
             this.sendData(newValue);
         }
     },
     methods: {
-        mult(){
-            this.sum = this.operand1 * this.operand2;
+        calculate(operation = "+"){
+            switch(operation){
+                case '+':
+                    this.add();
+                    break;
+                case '-':
+                    this.substract();
+                    break;
+                case '*':
+                    this.mult();
+                    break;
+                case '/':
+                    this.div();
+                    break;
+                case '%':
+                    this.divTwo();
+                    break;
+                case '^':
+                    this.exponentiation();
+                    break;
+                default: 
+                    break;
+            }
         },
-        div(op1, op2){
-            this.sum = op1/op2;
+        add(){
+            this.result = this.operand1 + this.operand2;
+        },
+        substract(){
+            this.result = this.operand1 - this.operand2;
+        },
+        mult(){
+            this.result = this.operand1 * this.operand2;
+        },
+        div(){
+
+            const {operand1, operand2 } = this;
+            if (operand2 === 0){
+                return this.result = 'Делить на 0 нельзя'
+            }
+            this.result = operand1 / operand2;
+        },
+        divTwo(){
+            if(this.operand2 == 0){
+                this.result = 'Делить на 0 нельзя';
+            } else {
+                this.result = Math.floor(this.operand1 / this.operand2);
+            }
+        },
+        exponentiation(){
+            this.result = Math.pow(this.operand1, this.operand2);
         },
         sendData(data){
             console.log('Send Data name', data);
         },
-        divTwo(op1, op2){
-            this.sum = Math.floor(op1 / op2);
-        },
-        exponentiation(op1, op2){
-            this.sum = Math.pow(op1,op2);
-        }
     },
     //ВЫЧИСЛЯЕТ значения после действий пользователя(?)
-    computed: {
-        powWithOperand(){
-            return Math.pow(this.operand1, this.operand2);
-        },
-        powSum(){
-            return Math.pow(this.sum, 4);
-        }
-    }
+    // computed: {
+    //     powWithOperand(){
+    //         return Math.pow(this.operand1, this.operand2);
+    //     },
+    //     powSum(){
+    //         return Math.pow(this.result, 4);
+    //     }
+    // }
 }
 </script>
 
