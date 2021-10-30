@@ -24,6 +24,21 @@
         <div>= {{result}}</div>
         <div>= fib {{fibResult}}</div>
 
+        <!-- HOMEWORK2 -->
+
+        <input v-model="checked" type="checkbox">
+        <div v-show="checked">
+            <div>
+                <button @click="opr = '1'">operand1</button>
+                <button @click="opr = '2'">operand2</button>
+            </div>
+            <button v-for="button in buttons" 
+                @click="log(button)"
+                :key="button">
+                {{button}}
+            </button>
+            <button @click="del">&larr;</button>
+        </div>
         <div class="error" 
         :class="{'red': error}" 
         v-if="error">
@@ -52,7 +67,7 @@
             <button v-for="operand in operands" 
                 @click="calculate(operand)"
                 :key="operand"
-                :disabled="operand1 === 0"
+                :disabled="operand2 === 0"
                 v-bind:title="operand" 
                 :alt="operand" 
                 > <!-- v-bind связывает шаблон html с данными  :alt - при наведении вылезает картинка(?) с operand'ом
@@ -69,6 +84,9 @@ export default {
     name: "Calculator",
     data(){
         return{
+            opr: '',
+            checked: '',
+            buttons: ['0','1','2','3','4','5','6','7','8','9'],
             myCollection: [1,2,3,4,5],
             operands: ['+', '-', '/','*','%','^'],
             text1: '',
@@ -83,7 +101,6 @@ export default {
     //watch позволяет увидеть изменения (новое значение и старое) СМОТРИТ за изменениями
     watch: {
         result: function(newValue, oldValue){
-            // this.result = this.result + 1 (будет цикл, т.к. после изменения сумма увеличивается на 1(еще раз меняется))
             console.log(newValue, oldValue);
             this.sendData(newValue);
         }
@@ -119,12 +136,34 @@ export default {
             // Vue.set(object, propertyName, value)
             this.$set(this.logs, key, value);
         },
+        log(button){
+            if(this.opr == '1'){
+                    this.operand1 += button;
+            } else if(this.opr == '2'){
+                    this.operand2 += button;
+            }
+        },
+        del(){
+            if(this.opr == '1'){
+                let arr = Array.from(String(this.operand1), Number);
+                arr.splice(arr.length-1, 1);
+                let arrUp = arr.join('');
+                this.operand1 = +arrUp; //убирает 0 в начале
+            } else if (this.opr == '2'){
+                let arr = Array.from(String(this.operand2), Number);
+                arr.splice(arr.length-1, 1);
+                let arrUp = arr.join('');
+                this.operand2 = +arrUp;
+            }
+        },
         add(){
+            this.operand1 = +this.operand1;
+            this.operand2 = +this.operand2;
             this.result = this.operand1 + this.operand2;
             this.fibResult = this.fib1 + this.fib2;
         },
         substract(){
-            this.result = this.operand1 - this.operand2;
+            this.result = +this.operand1 - +this.operand2;
         },
         mult(){
             this.result = this.operand1 * this.operand2;
@@ -162,13 +201,6 @@ export default {
         fib2() {
             return this.fib(this.operand2)
         },
-        
-        // powWithOperand(){
-        //     return Math.pow(this.operand1, this.operand2);
-        // },
-        // powSum(){
-        //     return Math.pow(this.result, 4);
-        // }
     }
 }
 </script>
