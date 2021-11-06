@@ -1,40 +1,39 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <div v-html="dataHTML"></div>
-    <HelloWorld msg="Welcome to Your Vue.js App" :date="computedDate"/>
     <Calculator/>
 
-    <!-- <input @keyup.enter="onEnter"> --> <!-- после нажатия enter выполняется функция onEnter-->
-    <input @keyup="onEnter"> <!-- каждый раз при введении выполняется функция onEnter -->
+    <hr/>
 
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" :date="currentDate || new Date()"/> -->
-    <button @click="onClick">Click me </button> / {{count}}
-    <button @click="count = 1 + 2">Sum</button>
-    <button @click="onClick2(1,4)">Click me2</button>
-    {{ message }}
+    <counter v-if="showCounterValue" @click="showCounter" ref="counter"/>
+    <button @click="showCounter">Change</button>
+
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import Calculator from './components/Calculator.vue'
+import Counter from './components/Counter.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     Calculator,
+    Counter,
   },
   data(){
     return {
-      count: 0,
-      currentDate: null,
-      message: "HI",
-      dataHTML: "<div class='data'>123123</div>",
+      showCounterValue: true,
+      // count: 0,
+      // currentDate: null,
+      // message: "HI",
+      // dataHTML: "<div class='data'>123123</div>",
     }
   },
   methods: {
+    showCounter(){
+      this.$refs.counter.onClick;
+      console.log(this.$refs.counter.counter) //$refs помогает получить доступ к методам и свойствам компонентов
+    },
     onClick(){
       this.count +=1;
     },

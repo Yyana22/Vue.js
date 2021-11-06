@@ -153,7 +153,7 @@ export default {
                 let arr = Array.from(String(this.operand2), Number);
                 arr.splice(arr.length-1, 1);
                 let arrUp = arr.join('');
-                this.operand2 = +arrUp;
+                this.operand2 = +arrUp; 
             }
         },
         add(){
@@ -176,7 +176,7 @@ export default {
             }
             this.result = operand1 / operand2;
         },
-        divTwo(){
+        divTwo(){  
             if(this.operand2 == 0){
                 this.error = 'Делить на 0 нельзя';
             } else {
