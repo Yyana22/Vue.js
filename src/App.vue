@@ -1,72 +1,69 @@
 <template>
   <div id="app">
-    <Calculator/>
-
-    <hr/>
-
-    <counter v-if="showCounterValue" @click="showCounter" ref="counter"/>
-    <button @click="showCounter">Change</button>
-
+    <div :class="[$style.header]">
+      <h1>My Personal Cost</h1>
+    </div>
+    <div class="wrapper">
+      <AddPaymentForm @addNewPayment="addNewPaymentData"/>
+      <br>
+      <PaymentsDisplay :items="paymentsList"/>
+    </div>
   </div>
 </template>
 
 <script>
-import Calculator from './components/Calculator.vue'
-import Counter from './components/Counter.vue';
-
+import PaymentsDisplay from './components/PaymentsDisplay.vue'
+import AddPaymentForm from './components/AddPaymentForm.vue'
 export default {
   name: 'App',
   components: {
-    Calculator,
-    Counter,
+    PaymentsDisplay,
+    AddPaymentForm,
   },
   data(){
-    return {
-      showCounterValue: true,
-      // count: 0,
-      // currentDate: null,
-      // message: "HI",
-      // dataHTML: "<div class='data'>123123</div>",
-    }
+      return {
+          paymentsList: []
+      }
   },
   methods: {
-    showCounter(){
-      this.$refs.counter.onClick;
-      console.log(this.$refs.counter.counter) //$refs помогает получить доступ к методам и свойствам компонентов
+    addNewPaymentData(value){
+      this.paymentsList = [...this.paymentsList, value]
     },
-    onClick(){
-      this.count +=1;
-    },
-    onClick2(param, param2){
-      this.count = param + param2;
-    },
-    onEnter(){
-      console.log('KeyUp');
-    }
+      fetchData(){
+          return [
+              {
+                  date: "12.03.2020",
+                  category: "food",
+                  value: 180,
+              },
+              {
+                  date: "12.04.2020",
+                  category: "internet",
+                  value: 100,
+              },
+              {
+                  date: "01.02.2010",
+                  category: "food",
+                  value: 180,
+              },
+              {
+                  date: "03.03.2020",
+                  category: "sport",
+                  value: 1400,
+              },
+          ]
+      }
   },
-  computed: {
-    computedDate(){
-      return this.currentDate || new Date();
+
+    created(){
+        this.paymentsList = this.fetchData()
     }
-  },
 }
 </script>
 
-<style >
-button {
-  background-color: #2c3e50;
-  }
-.data {
-  color: green;
-  background-color: aqua;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style module>
+.header {
+  color: rgb(2, 71, 5);
+  font-size: 20px;
 }
 </style>
