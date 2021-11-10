@@ -6,7 +6,8 @@
     <div class="wrapper">
       <AddPaymentForm @addNewPayment="addNewPaymentData"/>
       <br>
-      <PaymentsDisplay :items="paymentsList"/>
+      <button @click="paymentsDisplayFlagChange()">ADD NEW COST+</button>
+      <PaymentsDisplay v-show="paymentsDisplayFlag" :items="paymentsList"/>
     </div>
   </div>
 </template>
@@ -20,14 +21,20 @@ export default {
     PaymentsDisplay,
     AddPaymentForm,
   },
+  paymentsDisplayFlag: '',
   data(){
       return {
-          paymentsList: []
+          paymentsDisplayFlag: '',
+          paymentsList: [],
       }
   },
   methods: {
+    paymentsDisplayFlagChange(){
+      this.paymentsDisplayFlag = !this.paymentsDisplayFlag;
+      console.log(this.paymentsDisplayFlag);
+    },
     addNewPaymentData(value){
-      this.paymentsList = [...this.paymentsList, value]
+      this.paymentsList = [...this.paymentsList, value];
     },
       fetchData(){
           return [
@@ -54,7 +61,6 @@ export default {
           ]
       }
   },
-
     created(){
         this.paymentsList = this.fetchData()
     }
